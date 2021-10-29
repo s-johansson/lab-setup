@@ -39,6 +39,7 @@ $script = <<SCRIPT
 echo *** I am provisioning...
 
 echo ** Installation of Docker
+cp /vagrant/docker.service /etc/systemd/system/docker.service
 apt-get install ca-certificates curl gnupg lsb-release
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 echo \
