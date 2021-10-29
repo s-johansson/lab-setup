@@ -48,11 +48,13 @@ apt-get update
 apt-get install -y docker-ce docker-ce-cli containerd.io
 
 echo ** Installation of Kubernetes
+apt-get install -y apt-transport-https ca-certificates curl
 cp /vagrant/hosts /etc/hosts
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 cp /vagrant/kubernetes.list /etc/apt/sources.list.d/kubernetes.list
 apt-get update 
 apt-get install -y kubelet kubeadm kubectl kubernetes-cni
+apt-mark hold kubelet kubeadm kubectl kubernetes-cni
 
 echo ** Installation of NFS
 apt-get install -y nfs-common
