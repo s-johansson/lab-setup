@@ -36,17 +36,26 @@ Vagrant.configure(2) do |config|
   end
 
 $script = <<SCRIPT
-echo I am provisioning...
+echo *** I am provisioning...
+
+echo ** Installation of Docker
+apt-get install ca-certificates curl gnupg lsb-release
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+apt-get update
+apt-get install -y docker-ce docker-ce-cli containerd.io
+
+echo ** Installation of Kubernetes
 cp /vagrant/hosts /etc/hosts
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 cp /vagrant/kubernetes.list /etc/apt/sources.list.d/kubernetes.list
 apt-get update 
-apt-get install -y docker.io kubelet kubeadm kubectl kubernetes-cni
-rm -rf /var/lib/kubelet/*
-echo I am turning off swap...
-swapoff -a
-echo I am joining NFS...
-apt-get install nfs-common -y
+apt-get install -y kubelet kubeadm kubectl kubernetes-cni
+
+echo ** Installation of NFS
+apt-get install -y nfs-common
 SCRIPT
 
 end
