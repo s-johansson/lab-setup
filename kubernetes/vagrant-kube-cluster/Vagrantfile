@@ -38,6 +38,16 @@ Vagrant.configure(2) do |config|
 $script = <<SCRIPT
 echo *** I am provisioning...
 
+echo ** Preparing network
+#cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+#br_netfilter
+#EOF
+cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+sysctl --system
+
 echo ** Installation of Docker
 cp /vagrant/docker.service /etc/systemd/system/docker.service
 apt-get install ca-certificates curl gnupg lsb-release
