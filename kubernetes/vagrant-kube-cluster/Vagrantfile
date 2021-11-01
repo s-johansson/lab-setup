@@ -67,6 +67,11 @@ apt-get update
 apt-get install -y kubelet kubeadm kubectl kubernetes-cni
 apt-mark hold kubelet kubeadm kubectl kubernetes-cni
 
+#echo ** fix scheduler health reporting
+#sed -i '/port=0/d' /etc/kubernetes/manifests/kube-scheduler.yaml
+#SCHEDULER_CONTAINER_ID=$(docker container ps | grep scheduler | awk '{print $1}')
+#for i in $SCHEDULER_CONTAINER_ID; do docker container restart  $i; done
+
 echo ** Installation of NFS
 apt-get install -y nfs-common
 SCRIPT
